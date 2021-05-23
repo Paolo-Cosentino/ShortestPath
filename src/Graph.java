@@ -2,16 +2,14 @@ import java.awt.*;
 import java.util.*;
 
 public class Graph {
+    private final int width = 100;
+    private final int height = 100;
     private int numberOfVertices;
-    private int width;
-    private int height;
     private Set<Vertex> vertices;
     private Map<Integer, Set<Vertex>> adjacencyList;
 
-    public Graph(int numberOfNodes, int width, int height) {
+    public Graph(int numberOfNodes) {
         this.numberOfVertices = numberOfNodes;
-        this.width = width;
-        this.height = height;
 
         vertices = new LinkedHashSet<>();
         populateVertices();
@@ -35,6 +33,7 @@ public class Graph {
     }
 
     private void populateAdjacencyList() {
+        Random r = new Random();
         for (int i = 1; i <= numberOfVertices; i++) {
             adjacencyList.put(i, new HashSet<>());
         }
@@ -48,7 +47,9 @@ public class Graph {
                     continue;
 
                 double cost = calculateEdgeCost(v1, v2);
-                if (new Random().nextBoolean()) {
+
+                // .125 chance of connecting edges to random generate graph
+                if ((r.nextInt(8) + 1) == 1) {
                     Set<Vertex> tmp1 = adjacencyList.get(v1.getId());
                     Set<Vertex> tmp2 = adjacencyList.get(v2.getId());
 
@@ -60,6 +61,42 @@ public class Graph {
                 }
             }
         }
+
+        // if DFS does not find 1 fully connected component, we try again
+        if (!isConnected()) {
+            populateAdjacencyList();
+        }
+    }
+
+    /**
+     * Checks if randomly generate graph is one fully
+     * connected component using DFS
+     *
+     * @return true if DFS visits all nodes, else false
+     */
+    private boolean isConnected() {
+        boolean[] visited = new boolean[numberOfVertices];
+        Stack<Vertex> stack = new Stack<>();
+        for (Vertex v : vertices) {
+            stack.push(v);
+            break;
+        }
+        int connectedVertices = 0;
+        while (!stack.isEmpty()) {
+            Vertex tmp = stack.pop();
+
+            if (!visited[tmp.getId() - 1]) {
+                connectedVertices++;
+                visited[tmp.getId() - 1] = true;
+            }
+
+            for (Vertex v : adjacencyList.get(tmp.getId())) {
+                if (!visited[v.getId() - 1]) {
+                    stack.push(v);
+                }
+            }
+        }
+        return connectedVertices == numberOfVertices;
     }
 
     private double calculateEdgeCost(Vertex v1, Vertex v2) {
@@ -76,22 +113,6 @@ public class Graph {
 
     public void setNumberOfVertices(int numberOfVertices) {
         this.numberOfVertices = numberOfVertices;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
     }
 
     public Set<Vertex> getVertices() {

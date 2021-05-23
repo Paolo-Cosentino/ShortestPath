@@ -9,8 +9,8 @@ public class Graph {
     private Set<Vertex> vertices;
     private Map<Integer, Set<Vertex>> adjacencyList;
 
-    public Graph(int numberOfNodes) {
-        this.numberOfVertices = numberOfNodes;
+    public Graph() {
+        setNumberOfVertices();
 
         vertices = new LinkedHashSet<>();
         populateVertices();
@@ -101,7 +101,13 @@ public class Graph {
         return numberOfVertices;
     }
 
-    public void setNumberOfVertices(int numberOfVertices) {
+    public void setNumberOfVertices() {
+        Scanner s = new Scanner(System.in);
+        int numberOfVertices;
+        do {
+            System.out.print("Number of nodes: ");
+            numberOfVertices = s.nextInt();
+        } while (numberOfVertices < 1);
         this.numberOfVertices = numberOfVertices;
     }
 

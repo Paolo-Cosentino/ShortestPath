@@ -4,11 +4,14 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner s = new Scanner(System.in);
-        System.out.println("Enter amount of nodes:");
-        int totalNodes = s.nextInt();
 
-        Graph g = new Graph(totalNodes);
+        Graph g = new Graph();
         g.printAdjacencyList();
+
+        Dijkstra d = new Dijkstra(g.getAdjacencyList(), g.getNumberOfVertices());
+        d.run(1);
+        d.printDistances();
+
         g.drawGraph();
     }
 }

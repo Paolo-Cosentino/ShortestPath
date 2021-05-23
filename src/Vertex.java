@@ -1,10 +1,18 @@
+import java.util.Comparator;
 import java.util.Objects;
 
-public class Vertex {
+public class Vertex implements Comparator<Vertex> {
     private int id;
     private double xAxis;
     private double yAxis;
     private double cost;
+
+    public Vertex(){}
+
+    public Vertex(int id, double cost) {
+        this.id = id;
+        this.cost = cost;
+    }
 
     public Vertex(int id, double xAxis, double yAxis) {
         this.id = id;
@@ -50,6 +58,10 @@ public class Vertex {
         this.yAxis = yAxis;
     }
 
+    public double getCost() {
+        return cost;
+    }
+
     @Override
     public String toString() {
         return "Vertex{" +
@@ -57,6 +69,11 @@ public class Vertex {
                 ", xAxis=" + xAxis +
                 ", yAxis=" + yAxis +
                 '}';
+    }
+
+    @Override
+    public int compare(Vertex o1, Vertex o2) {
+        return Double.compare(o1.cost, o2.cost);
     }
 
     @Override
@@ -71,4 +88,6 @@ public class Vertex {
     public int hashCode() {
         return Objects.hash(getId());
     }
+
+
 }

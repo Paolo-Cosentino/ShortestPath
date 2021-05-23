@@ -1,12 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class GraphGUI extends JPanel implements Runnable {
+    private final DecimalFormat df = new DecimalFormat("0.00");
     private static final long serialVersionUID = 1L;
     private Set<Vertex> vertices;
     private double graphWidth;
@@ -70,16 +72,15 @@ public class GraphGUI extends JPanel implements Runnable {
             int x0 = 2 * scaling;
             int x1 = ovalSize + (2 * scaling);
             int y0 = getHeight() - ((i * (getHeight() - (3 * scaling))) / gridCount + (2 * scaling));
-            int y1 = y0;
             if (vertices.size() > 0) {
                 g2.setColor(Color.black);
-                g2.drawLine((2 * scaling) + 1 + ovalSize, y0, getWidth() - scaling, y1);
+                g2.drawLine((2 * scaling) + 1 + ovalSize, y0, getWidth() - scaling, y0);
                 String yLabel = ((int) ((getGraphHeight() * ((i * 1.0) / gridCount)) * 100)) / 100.0 + "";
                 FontMetrics metrics = g2.getFontMetrics();
                 int labelWidth = metrics.stringWidth(yLabel);
                 g2.drawString(yLabel, x0 - labelWidth - 5, y0 + (metrics.getHeight() / 2) - 3);
             }
-            g2.drawLine(x0, y0, x1, y1);
+            g2.drawLine(x0, y0, x1, y0);
         }
 
         for (int i = 0; i < gridCount + 1; i++) {
@@ -115,6 +116,14 @@ public class GraphGUI extends JPanel implements Runnable {
                         int x2 = graphPoints.get(vertex.getId() - 1).x;
                         int y2 = graphPoints.get(vertex.getId() - 1).y;
                         g2.drawLine(x1, y1, x2, y2);
+
+
+                        int p = (x1 + x2) / 2;
+                        int q = (y1 + y2) / 2;
+
+                        g2.setColor(Color.black);
+                        g2.drawString(getDistance(id, vertex.getId()), p, q);
+                        g2.setColor(Color.gray);
                     }
                 }
             }
@@ -123,12 +132,10 @@ public class GraphGUI extends JPanel implements Runnable {
         //Draw the oval
         g2.setStroke(stroke);
         g2.setColor(Color.red);
-        for (int i = 0; i < graphPoints.size(); i++) {
-            double x = graphPoints.get(i).x - ovalSize / 2;
-            double y = graphPoints.get(i).y - ovalSize / 2;
-            double ovalW = ovalSize;
-            double ovalH = ovalSize;
-            Ellipse2D.Double shape = new Ellipse2D.Double(x, y, ovalW, ovalH);
+        for (Point graphPoint : graphPoints) {
+            double x = graphPoint.x - ovalSize / 2.00;
+            double y = graphPoint.y - ovalSize / 2.00;
+            Ellipse2D.Double shape = new Ellipse2D.Double(x, y, ovalSize, ovalSize);
             g2.draw(shape);
         }
 
@@ -139,6 +146,16 @@ public class GraphGUI extends JPanel implements Runnable {
             int y = graphPoints.get(i).y - ovalSize / 2;
             g2.drawString("" + (i + 1), x, y);
         }
+    }
+
+    private String getDistance(int src, int dest) {
+        Set<Vertex> tmp = adjList.get(src);
+
+        for (Vertex v : tmp)
+            if (v.getId() == dest)
+                return df.format(v.getCost());
+
+        return "MISSING";
     }
 
     public void run() {

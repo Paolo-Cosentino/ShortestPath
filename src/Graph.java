@@ -2,6 +2,7 @@ import java.awt.*;
 import java.util.*;
 
 public class Graph {
+    private final Random r = new Random();
     private final int width = 100;
     private final int height = 100;
     private int numberOfVertices;
@@ -19,7 +20,6 @@ public class Graph {
     }
 
     private void populateVertices() {
-        Random r = new Random();
         int id = 1;
         while (vertices.size() != numberOfVertices) {
             int scale = (int) Math.pow(10, 1);
@@ -33,31 +33,21 @@ public class Graph {
     }
 
     private void populateAdjacencyList() {
-        Random r = new Random();
         for (int i = 1; i <= numberOfVertices; i++) {
             adjacencyList.put(i, new HashSet<>());
         }
 
-        Object[] temp = vertices.toArray();
-        for (int i = 1; i <= numberOfVertices; i++) {
-            Vertex v1 = (Vertex) temp[i - 1];
-
+        for (Vertex v1 : vertices) {
             for (Vertex v2 : vertices) {
-                if (v1.equals(v2))
-                    continue;
-
+                if (v1.equals(v2)) continue;
                 double cost = calculateEdgeCost(v1, v2);
 
-                // .125 chance of connecting edges to random generate graph
+                // random chance of connecting 2 vertices to generate a unique graph every time
                 if ((r.nextInt(8) + 1) == 1) {
                     Set<Vertex> tmp1 = adjacencyList.get(v1.getId());
                     Set<Vertex> tmp2 = adjacencyList.get(v2.getId());
-
-                    if (!tmp1.contains(v2))
-                        tmp1.add(new Vertex(v2, cost));
-
-                    if (!tmp2.contains(v1))
-                        tmp2.add(new Vertex(v1, cost));
+                    if (!tmp1.contains(v2)) tmp1.add(new Vertex(v2, cost));
+                    if (!tmp2.contains(v1)) tmp2.add(new Vertex(v1, cost));
                 }
             }
         }

@@ -1,28 +1,19 @@
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.RenderingHints;
-import java.awt.Stroke;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 public class GraphGUI extends JPanel implements Runnable {
     private static final long serialVersionUID = 1L;
     private Set<Vertex> vertices;
     private double graphWidth;
     private double graphHeight;
-    private int scaling = 25;
-    private int ovalSize = 6;
-    private int gridCount = 10;
+    private final int scaling = 25;
+    private final int ovalSize = 6;
+    private final int gridCount = 10;
     private Map<Integer, Set<Vertex>> adjList;
 
 
@@ -59,30 +50,30 @@ public class GraphGUI extends JPanel implements Runnable {
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        double xScale =  ( (getWidth() - 3 * scaling) / (graphWidth));
-        double yScale =   (( getHeight() - 3 * scaling) / (graphHeight));
+        double xScale = ((getWidth() - 3 * scaling) / (graphWidth));
+        double yScale = ((getHeight() - 3 * scaling) / (graphHeight));
 
         List<Point> graphPoints = new ArrayList<>();
-        for (Vertex key: vertices) {
-            double x1 = (key.getxAxis() * (xScale) + (2*scaling));
-            double y1 =  ((graphHeight - key.getyAxis())  * yScale + scaling );
+        for (Vertex key : vertices) {
+            double x1 = (key.getxAxis() * (xScale) + (2 * scaling));
+            double y1 = ((graphHeight - key.getyAxis()) * yScale + scaling);
             Point point = new Point();
             point.setLocation(x1, y1);
             graphPoints.add(point);
         }
 
         g2.setColor(Color.white);
-        g2.fillRect(2*scaling, scaling, getWidth() - (3 * scaling), getHeight() - 3 * scaling);
+        g2.fillRect(2 * scaling, scaling, getWidth() - (3 * scaling), getHeight() - 3 * scaling);
         g2.setColor(Color.black);
 
         for (int i = 0; i < gridCount + 1; i++) {
-            int x0 = 2*scaling;
-            int x1 = ovalSize + (2*scaling);
-            int y0 = getHeight() - ((i * (getHeight() - (3*scaling))) / gridCount + (2*scaling));
+            int x0 = 2 * scaling;
+            int x1 = ovalSize + (2 * scaling);
+            int y0 = getHeight() - ((i * (getHeight() - (3 * scaling))) / gridCount + (2 * scaling));
             int y1 = y0;
             if (vertices.size() > 0) {
                 g2.setColor(Color.black);
-                g2.drawLine((2*scaling) + 1 + ovalSize, y0, getWidth() - scaling, y1);
+                g2.drawLine((2 * scaling) + 1 + ovalSize, y0, getWidth() - scaling, y1);
                 String yLabel = ((int) ((getGraphHeight() * ((i * 1.0) / gridCount)) * 100)) / 100.0 + "";
                 FontMetrics metrics = g2.getFontMetrics();
                 int labelWidth = metrics.stringWidth(yLabel);
@@ -92,14 +83,14 @@ public class GraphGUI extends JPanel implements Runnable {
         }
 
         for (int i = 0; i < gridCount + 1; i++) {
-            int x0 = i * (getWidth() - (scaling * 3)) / gridCount+ (2*scaling);
+            int x0 = i * (getWidth() - (scaling * 3)) / gridCount + (2 * scaling);
             int x1 = x0;
-            int y0 = getHeight() - (2*scaling);
+            int y0 = getHeight() - (2 * scaling);
             int y1 = y0 - ovalSize;
             if ((i % ((int) ((vertices.size() / 20.0)) + 1)) == 0) {
                 if (vertices.size() > 0) {
                     g2.setColor(Color.black);
-                    g2.drawLine(x0, getHeight() - (2*scaling) - 1 - ovalSize, x1, scaling);
+                    g2.drawLine(x0, getHeight() - (2 * scaling) - 1 - ovalSize, x1, scaling);
                     String xLabel = ((int) ((getGraphWidth() * ((i * 1.0) / gridCount)) * 100)) / 100.0 + "";//i + "";
                     FontMetrics metrics = g2.getFontMetrics();
                     int labelWidth = metrics.stringWidth(xLabel);
@@ -119,10 +110,10 @@ public class GraphGUI extends JPanel implements Runnable {
             if ((adjList.get(id) != null) && (!adjList.get(id).isEmpty())) {
                 for (Vertex vertex : adjList.get(id)) {
                     if (adjList.get(id).contains(vertex)) {
-                        int x1 = graphPoints.get(id-1).x;
-                        int y1 = graphPoints.get(id-1).y;
-                        int x2 = graphPoints.get(vertex.getId()-1).x;
-                        int y2 = graphPoints.get(vertex.getId()-1).y;
+                        int x1 = graphPoints.get(id - 1).x;
+                        int y1 = graphPoints.get(id - 1).y;
+                        int x2 = graphPoints.get(vertex.getId() - 1).x;
+                        int y2 = graphPoints.get(vertex.getId() - 1).y;
                         g2.drawLine(x1, y1, x2, y2);
                     }
                 }
@@ -146,12 +137,12 @@ public class GraphGUI extends JPanel implements Runnable {
         for (int i = 0; i < graphPoints.size(); i++) {
             int x = graphPoints.get(i).x - ovalSize / 2;
             int y = graphPoints.get(i).y - ovalSize / 2;
-            g2.drawString(""+(i+1), x, y);
+            g2.drawString("" + (i + 1), x, y);
         }
     }
 
     public void run() {
-        String graphName= "Graph GUI";
+        String graphName = "Graph GUI";
         JFrame frame = new JFrame(graphName);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add(this);

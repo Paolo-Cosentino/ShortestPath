@@ -7,16 +7,8 @@ public class Main {
         System.out.println("Enter amount of nodes:");
         int totalNodes = s.nextInt();
 
-        System.out.println("Enter width of the graph:");
-        int width = s.nextInt();
-
-        System.out.println("Enter height of the graph:");
-        int height = s.nextInt();
-
-        Graph g = new Graph(totalNodes, width, height);
+        Graph g = new Graph(totalNodes);
         g.printAdjacencyList();
         g.drawGraph();
-
-
     }
 }

@@ -1,4 +1,4 @@
-public class Edge implements Comparable {
+public class Edge implements Comparable<Edge> {
     private int startPoint;
     private int endPoint;
     private long weight;
@@ -21,9 +21,8 @@ public class Edge implements Comparable {
         return weight;
     }
 
-    public int compareTo(Object o) {
-        Edge e = (Edge) o;
-        return Long.compare(this.weight, e.weight);
+    public int compareTo(Edge o) {
+        return Long.compare(this.weight, o.weight);
     }
 
     public String toString() {

@@ -175,7 +175,7 @@ public class GraphGUI extends JPanel implements Runnable {
     }
 
     public void run() {
-        String graphName = "Sensor Network Graph";
+        String graphName = "Graph";
         JFrame frame = new JFrame(graphName);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add(this);

@@ -54,7 +54,7 @@ public class Graph {
     }
 
     public void prompt() {
-        System.out.println("Enter the number of nodes:");
+        System.out.print("Enter the number of nodes: ");
         setNumberOfNodes(SCAN.nextInt());
 
         populateNodes();

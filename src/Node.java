@@ -2,20 +2,17 @@ class Node {
     private final int id;
     private long cost;
     private Axis axis;
-    private boolean dataNode;
 
     public Node(int id, Axis axis) {
         this.id = id;
         this.cost = 0;
         this.axis = axis;
-        this.dataNode = false;
     }
 
     public Node(Node node) {
         this.id = node.id;
         this.cost = node.cost;
         this.axis = node.axis;
-        this.dataNode = node.dataNode;
     }
 
     public Node(int id, int cost) {
@@ -25,8 +22,7 @@ class Node {
 
     @Override
     public String toString() {
-        return (this.dataNode ? "Data\t" : "Storage\t")
-                + ": " + this.id
+        return this.id
                 + ", xAxis:" + this.axis.getxAxis()
                 + ", yAxis:" + this.axis.getyAxis();
     }
